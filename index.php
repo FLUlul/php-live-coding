@@ -8,117 +8,98 @@
     <title>live-coding</title>
 
     <!--  
-      Definire classe Persona:
-     *          - ATTRIBUTI (private):
-     *              - nome
-     *              - cognome
-     *              - dataNascita (stringa)
-     *          - METODI:
-     *              - costruttore che accetta nome e cognome
-     *              - setter/getter per ogni variabile
-     *              - printFullPerson: che stampa "nome cognome: dataNascita"
-     *              - toString: che ritorna "nome cognome: dataNascita"
+     *      Definire classe User:
+     *          ATTRIBUTI (private):
+     *          - username 
+     *          - password
+     *          - age
+     *          
+     *          METODI:
+     *          - costruttore che accetta username, e password
+     *          - proprieta' getter/setter
+     *          - printMe: che stampa se stesso
+     *          - toString: "username: age [password]"
      * 
+     *          ECCEZIONI:
+     *          - scatenare eccezione quando username e' minore di 3 caratteri o maggiore di 16
+     *          - scatenare eccezione se password non contiene un carattere speciale (non alpha-numerico)
+     *          - scatenare eccezione se age non e' un numero
      * 
-     Definire classe Employee che eredita da Persona:
-     *          - ATTRIBUTI (private):
-     *              - stipendio
-     *              - dataAssunzione
-     *          - METODI:
-     *              - costruttore che accetta nome, cognome e stipendio
-     *              - setter/getter per variabili 
-     *              - printFullEmployee: che stampa "nome cognome: stipendio (dataAssunzione)"
-     *              - toString: che ritorna "nome cognome: stipendio (dataAssunzione)"
+     *          NOTE:
+     *          - per testare il singolo carattere di una stringa
+     * 
+     *      Testare la classe appena definita con dati corretti e NON corretti all'interno di un
+     *      try-catch e eventualmente informare l'utente del problema
     -->
     <?php
-        class Persona {
-            private $nome;
-            private $cognome;
-            private $dataNascita;
+        class User {
+            private $username;
+            private $password;
+            private $age;
 
-            public function __construct($nome, $cognome) {
-                $this -> setNome($nome);
-                $this -> setCognome($cognome);
-            }
-
-            public function setNome($nome) {
-                $this -> nome = $nome;
-            }
-            public function getNome() {
-                return $this -> nome;
-            }
-            public function setCognome($cognome) {
-                $this -> cognome = $cognome;
-            }
-            public function getCognome() {
-                return $this -> cognome;
-            }
-            public function setDataNascita($dataNascita) {
-                $this -> dataNascita = $dataNascita;
-            }
-            public function getDataNascita() {
-                return $this -> dataNascita;
+            public function __construct($username, $password) {
+                $this -> setUsername($username);
+                $this -> setPassword($password);
             }
 
-            public function printFullPerson() {
-                return $this->getNome() . " " . $this->getCognome() . ": " . $this->getDataNascita();
+            public function setUsername($username) {
+                if(strlen($username) < 3 || strlen($username) > 16) {
+                    throw new Exception("Inserire un username dai 3 ai 16 caratteri");
+                }
+
+                $this -> username = $username;
+            }
+            public function getUsername() {
+                return $this -> username;
+            }
+            public function setPassword($password) {
+                if (ctype_alnum($password)) {
+                    throw new Exception("Inserire una password che contenga almeno un carattere speciale(es. - _ : , etc...");
+                }
+
+                $this -> password = $password;
+            }
+            public function getPassword() {
+                return $this -> password;
+            }
+            public function setAge($age) {
+                if (!is_int($age) || $age < 18) {
+                    throw new Exception("Inserire un eta' da 18 anni in su' in valore numerico");
+                }
+
+                $this -> age = $age;
+            }
+            public function getAge() {
+                return $this -> age;
+            }
+
+            public function printFullUser() {
+                echo $this;
             }
             public function __toString() {
-                return $this->getNome() . " " . $this->getCognome() . ": " . $this->getDataNascita();
+                return $this->getUsername() . ": " . $this->getAge() . " [" . $this->getPassword() . "]";
             }
         }
-
-        class Employee extends Persona {
-            private $stipendio;
-            private $dataAssunzione;
-
-            public function __construct($nome, $cognome, $stipendio){
-                parent::__construct($nome, $cognome);
-                $this->setStipendio($stipendio);
-            }
-
-            public function setStipendio($stipendio) {
-                $this -> stipendio = $stipendio;
-            }
-            public function getStipendio() {
-                return $this -> stipendio;
-            }
-            public function setDataAssunzione($dataAssunzione) {
-                $this -> dataAssunzione = $dataAssunzione;
-            }
-            public function getDataAssunzione() {
-                return $this -> dataAssunzione;
-            }
-
-            public function printFullEmployee() {
-                return $this->getNome() . " " . $this->getCognome() . ": " . $this->getStipendio() . " || " . $this->getDataAssunzione();
-            }
-            public function __toString() {
-                return $this->getNome() . " " . $this->getCognome() . ": " . $this->getStipendio() . " || " . $this->getDataAssunzione();
-            }
-        }
-
-        $persona1 = new Persona("Valerio", "Massi");
-        $persona1 -> setDataNascita("31/01/1994");
-        $emp1 = new Employee("Valerio", "Massi", "1500 euro");
-        $emp1 -> setDataAssunzione("01/01/2022");
     ?>
 </head>
 <body>
     <h1>HELLO WORLD</h1>
 
     <?php
-        echo "<h1>Print Full Person</h1>";
-        echo $persona1 -> printFullPerson();
-        echo "<h1>Print __toString</h1>";
-        echo $persona1;
-        echo "<br><br>";
-        echo "<h1>Print Full Employee</h1>";
-        echo $emp1 -> printFullEmployee();
-        echo "<h1>Print __toString</h1>";
-        echo $emp1;
+        echo "<h1>Print Full User</h1>";
+        try {
+            $user1 = new User("CapoNappa", "abc_");
+            $user1 -> setAge(19);
 
-        echo "<br><br>compilato ok!";
+            $user1 -> printFullUser();
+        } catch (Exception $e) {
+            echo $e -> getMessage();
+        } finally {
+            echo "<br>Dati Inseriti!";
+        }
+        
+
+        echo "<br><br><br>compilato ok!";
     ?>
 </body>
 </html>
