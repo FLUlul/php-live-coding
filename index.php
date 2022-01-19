@@ -8,78 +8,117 @@
     <title>live-coding</title>
 
     <!--  
-     * DEFINIRE CLASSE Student:
-     *      Attributi:
-     *      - name
-     *      - surname 
-     *      - registrationNumber
+      Definire classe Persona:
+     *          - ATTRIBUTI (private):
+     *              - nome
+     *              - cognome
+     *              - dataNascita (stringa)
+     *          - METODI:
+     *              - costruttore che accetta nome e cognome
+     *              - setter/getter per ogni variabile
+     *              - printFullPerson: che stampa "nome cognome: dataNascita"
+     *              - toString: che ritorna "nome cognome: dataNascita"
      * 
-     *      Metodi:
-     *      - costruttore che accetta name e surname
-     *      - getFullname: restituisce nome completo (nome + ' ' + cognome)
-     *      - __toString: restituisce nome completo + registrationNumber 
-     *          (nome + " " + cognome + ": " + registrationNumber)
      * 
-     * UTILIZZO OGGETTI Studend:
-     * 
-     *      Generare 3 istanze della classe Student con valori in ingresso diversi 
-     *      (nome e cognome);
-     *      Valorizzare la variabile registrationNumber per ogni istanza
-     *      Stampare i nomi completi per ogni oggetto
-     *      Stampare tutti i 3 oggetti     
-     * 
-     *  RISULTATO ATTESO:
-     * 
-     *      Marco Rossi
-     *      Francesca Bianchi
-     *      Piero Verdi
-     *      
-     *      Marco Rossi: 12345
-     *      Francesca Bianchi: 12346
-     *      Piero Verdi: 12347
-     */
+     Definire classe Employee che eredita da Persona:
+     *          - ATTRIBUTI (private):
+     *              - stipendio
+     *              - dataAssunzione
+     *          - METODI:
+     *              - costruttore che accetta nome, cognome e stipendio
+     *              - setter/getter per variabili 
+     *              - printFullEmployee: che stampa "nome cognome: stipendio (dataAssunzione)"
+     *              - toString: che ritorna "nome cognome: stipendio (dataAssunzione)"
     -->
     <?php
-        class Student {
-            public $name;
-            public $surname;
-            public $regNum;
+        class Persona {
+            private $nome;
+            private $cognome;
+            private $dataNascita;
 
-            public function __construct($name, $surname)
-            {
-                $this -> name = $name;
-                $this -> surname = $surname;
+            public function __construct($nome, $cognome) {
+                $this -> setNome($nome);
+                $this -> setCognome($cognome);
             }
 
-            public function getFullName() {
-                return $this -> name . " " . $this -> surname;
+            public function setNome($nome) {
+                $this -> nome = $nome;
+            }
+            public function getNome() {
+                return $this -> nome;
+            }
+            public function setCognome($cognome) {
+                $this -> cognome = $cognome;
+            }
+            public function getCognome() {
+                return $this -> cognome;
+            }
+            public function setDataNascita($dataNascita) {
+                $this -> dataNascita = $dataNascita;
+            }
+            public function getDataNascita() {
+                return $this -> dataNascita;
             }
 
-            public function __toString(){
-                return $this-> getFullName() . ": " . $this->regNum;
+            public function printFullPerson() {
+                return $this->getNome() . " " . $this->getCognome() . ": " . $this->getDataNascita();
+            }
+            public function __toString() {
+                return $this->getNome() . " " . $this->getCognome() . ": " . $this->getDataNascita();
             }
         }
 
-        $student1 = new Student("Valerio", "Massi");
-        $student2 = new Student("Mario", "Bianchi");
-        $student3 = new Student("Francesco", "Caponero");
+        class Employee extends Persona {
+            private $stipendio;
+            private $dataAssunzione;
 
-        $student1 -> regNum = 12345;
-        $student2 -> regNum = 12346;
-        $student3 -> regNum = 12347;
+            public function __construct($nome, $cognome, $stipendio){
+                parent::__construct($nome, $cognome);
+                $this->setStipendio($stipendio);
+            }
+
+            public function setStipendio($stipendio) {
+                $this -> stipendio = $stipendio;
+            }
+            public function getStipendio() {
+                return $this -> stipendio;
+            }
+            public function setDataAssunzione($dataAssunzione) {
+                $this -> dataAssunzione = $dataAssunzione;
+            }
+            public function getDataAssunzione() {
+                return $this -> dataAssunzione;
+            }
+
+            public function printFullEmployee() {
+                return $this->getNome() . " " . $this->getCognome() . ": " . $this->getStipendio() . " || " . $this->getDataAssunzione();
+            }
+            public function __toString() {
+                return $this->getNome() . " " . $this->getCognome() . ": " . $this->getStipendio() . " || " . $this->getDataAssunzione();
+            }
+        }
+
+        $persona1 = new Persona("Valerio", "Massi");
+        $persona1 -> setDataNascita("31/01/1994");
+        $emp1 = new Employee("Valerio", "Massi", "1500 euro");
+        $emp1 -> setDataAssunzione("01/01/2022");
     ?>
 </head>
 <body>
     <h1>HELLO WORLD</h1>
 
     <?php
-        echo "Student 1: " . $student1 -> getFullName() . "<br>";
-        echo "Student 2: " . $student2 -> getFullName() . "<br>";
-        echo "Student 3: " . $student3 -> getFullName() . "<br>";
-        echo "<br>";
-        echo "Student 1: " . $student1 . "<br>";
-        echo "Student 2: " . $student2 . "<br>";
-        echo "Student 3: " . $student3 . "<br>";
+        echo "<h1>Print Full Person</h1>";
+        echo $persona1 -> printFullPerson();
+        echo "<h1>Print __toString</h1>";
+        echo $persona1;
+        echo "<br><br>";
+        echo "<h1>Print Full Employee</h1>";
+        echo $emp1 -> printFullEmployee();
+        echo "<h1>Print __toString</h1>";
+        echo $emp1;
+
+        echo "<br><br>compilato ok!";
     ?>
 </body>
 </html>
